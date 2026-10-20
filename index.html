@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bài tập 23 – Trang chủ</title>
+<style>
+:root{--bg:#2a0d0d;--paper:#f6e7c8;--gold:#e8b44a;--red:#b3261e;--ink:#3b1410}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 0,#5a1a14,var(--bg) 70%);color:var(--paper);font-family:Georgia,"Times New Roman",serif}
+main{width:min(720px,100%)}
+h1{font-size:clamp(28px,6vw,44px);margin:0 0 8px;color:var(--gold);font-weight:700}
+p.sub{margin:0 0 32px;opacity:.85;line-height:1.6}
+.links{display:grid;gap:16px}
+a.card{display:block;padding:22px 24px;background:var(--paper);color:var(--ink);text-decoration:none;border-left:8px solid var(--red);border-radius:4px}
+a.card:hover,a.card:focus-visible{border-left-color:var(--gold);outline:2px solid var(--gold)}
+a.card strong{display:block;font-size:20px;margin-bottom:4px}
+a.card span{font-size:15px;opacity:.8}
+</style>
+</head>
+<body>
+<main>
+  <h1>Bài tập 23</h1>
+  <p class="sub">Họ tên: Trương Tấn Phát – MSSV: 231A010271. Chọn một bài để xem kết quả.</p>
+  <div class="links">
+    <a class="card" href="bai22.html"><strong>Kết quả Bài tập 22</strong><span>Mở trang kết quả của Bài tập 22</span></a>
+    <a class="card" href="den-keo-quan.html"><strong>Đèn kéo quân</strong><span>6 hình ảnh quay vòng tròn, rê chuột vào hình để dừng</span></a>
+  </div>
+</main>
+</body>
+</html>

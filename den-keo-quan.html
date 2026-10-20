@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đèn kéo quân</title>
+<style>
+:root{--bg:#1c0807;--gold:#e8b44a;--red:#b3261e;--paper:#f6e7c8}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:radial-gradient(circle at 50% 45%,#6b1d14,var(--bg) 70%);color:var(--paper);font-family:Georgia,"Times New Roman",serif;overflow:hidden}
+h1{margin:0;font-size:clamp(24px,5vw,38px);color:var(--gold)}
+.hint{margin:0;opacity:.8;font-size:15px;text-align:center;padding:0 16px}
+.stage{--w:200px;--r:173px;perspective:1100px;width:var(--w);height:280px;position:relative}
+.lantern{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(-8deg)}
+.face{position:absolute;inset:0;border:6px solid var(--gold);background:#3b1410;box-shadow:0 0 40px rgba(255,170,60,.55),inset 0 0 30px rgba(255,200,100,.6);overflow:hidden;cursor:pointer;backface-visibility:visible}
+.face img{width:100%;height:100%;object-fit:cover;display:block}
+.face:hover{box-shadow:0 0 60px rgba(255,210,90,.95),inset 0 0 30px rgba(255,200,100,.6)}
+.cap{position:absolute;left:50%;width:calc(var(--w)*2.1);height:22px;margin-left:calc(var(--w)*-1.05);background:linear-gradient(var(--red),#7a1712);border-radius:6px;box-shadow:0 0 18px rgba(232,180,74,.5)}
+.cap.top{top:-34px}.cap.bottom{bottom:-34px}
+.status{font-size:14px;color:var(--gold);min-height:20px}
+@media(max-width:480px){.stage{--w:150px;--r:130px;height:210px}}
+</style>
+</head>
+<body>
+<h1>Đèn kéo quân</h1>
+<div class="stage" id="stage">
+  <div class="cap top"></div>
+  <div class="lantern" id="lantern"></div>
+  <div class="cap bottom"></div>
+</div>
+<p class="status" id="status">Đèn đang quay</p>
+<p class="hint">Rê chuột vào một hình để đèn dừng lại, rê chuột ra để đèn quay tiếp.</p>
+
+<script>
+// Thay bằng tên 6 file ảnh của bạn trong thư mục images/
+const IMAGES = ["images/anh1.svg","images/anh2.svg","images/anh3.svg","images/anh4.svg","images/anh5.svg","images/anh6.svg"];
+
+const lantern = document.getElementById("lantern");
+const stage = document.getElementById("stage");
+const status = document.getElementById("status");
+const SPEED = 30; // độ mỗi giây
+
+function placeholder(n){
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="280"><rect width="200" height="280" fill="#8c2a1c"/><text x="100" y="150" font-size="28" fill="#f6e7c8" text-anchor="middle" font-family="Georgia">Ảnh ${n}</text></svg>`;
+  return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+}
+
+IMAGES.forEach((src,i)=>{
+  const face = document.createElement("div");
+  face.className = "face";
+  face.style.transform = `rotateY(${i*60}deg) translateZ(var(--r))`;
+  const img = new Image();
+  img.alt = "Mặt đèn số " + (i+1);
+  img.src = src;
+  img.onerror = ()=>{ img.onerror=null; img.src = placeholder(i+1); };
+  face.appendChild(img);
+  face.addEventListener("mouseenter",()=>{ paused = true; status.textContent = "Đèn đã dừng – ảnh " + (i+1); });
+  face.addEventListener("mouseleave",()=>{ paused = false; status.textContent = "Đèn đang quay"; });
+  lantern.appendChild(face);
+});
+
+let angle = 0, paused = false, last = performance.now();
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function tick(now){
+  const dt = (now - last)/1000; last = now;
+  if(!paused && !reduce) angle = (angle + SPEED*dt) % 360;
+  lantern.style.transform = `rotateX(-8deg) rotateY(${angle}deg)`;
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
